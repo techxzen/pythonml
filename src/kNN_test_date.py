@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+import helper
+import kNN
+
 def getData():
     filename = "../data/datingTestSet.txt"
     fi = open(filename, 'r+')
@@ -27,7 +30,26 @@ def getData():
         dataSetY.append(alist[3])
     return np.array(dataSetX), np.array(dataSetY)
 
-def main():
+# testSetPercent: 0.1
+# k: 3
+def datingClassTest(testSetPercent, k):
+    dataSetX, dataSetY = getData()
+    normDataSetX, ranges, mins = helper.autoNormalize(dataSetX)
+    dataSize = normDataSetX.shape[0]
+    testSize = int(dataSize * testSetPercent)
+    errorCount = 0
+    for i in range(testSize):
+        inX = normDataSetX[i]
+        outY = kNN.classify(inX, normDataSetX[testSize:,:], \
+                            dataSetY[testSize:], \
+                            k)
+        if(outY != dataSetY[i]):
+            errorCount = errorCount + 1
+    errorRate = errorCount / float(testSize)
+    print("error rate = %f (%d/%d)" %(errorRate, errorCount, testSize))
+    
+
+def plotDatingClass():
     dataSetX, dataSetY = getData()
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -38,6 +60,10 @@ def main():
     plt.xlabel("time used to play games/ percent", fontsize=14)
     plt.ylabel("ice cream used per week/ volume", fontsize=14)
     plt.show()
+
+def main():
+    # plotDatingClass()
+    datingClassTest(0.1, 3)
 
 if __name__ == "__main__":
     main()
