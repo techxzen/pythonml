@@ -4,7 +4,6 @@
 
 import numpy as np
 
-import matplotlib
 import matplotlib.pyplot as plt
 
 import helper
@@ -46,8 +45,19 @@ def datingClassTest(testSetPercent, k):
         if(outY != dataSetY[i]):
             errorCount = errorCount + 1
     errorRate = errorCount / float(testSize)
-    print("error rate = %f (%d/%d)" %(errorRate, errorCount, testSize))
-    
+    return errorRate
+
+def profiling():
+    perSet = [0.1, 0.2, 0.3]
+    kSet   = np.arange(1,20,2)
+    resultSet = []
+    for per in perSet:
+        for k in kSet:
+            rate = datingClassTest(per, k)
+            resultSet.append((per, k, rate))
+    sortedResultSet = sorted(resultSet, key = lambda item:item[2])
+    print(sortedResultSet[0])
+
 
 def plotDatingClass():
     dataSetX, dataSetY = getData()
@@ -63,7 +73,7 @@ def plotDatingClass():
 
 def main():
     # plotDatingClass()
-    datingClassTest(0.1, 3)
+    profiling()
 
 if __name__ == "__main__":
     main()

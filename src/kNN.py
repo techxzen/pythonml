@@ -42,6 +42,6 @@ def classify(inX, dataSetX, dataSetY, k):
         label = dataSetY[idx]
         classCount[label] = classCount.get(label,0) + 1
     sortedClassCount = sorted(classCount.items(),\
-                     key=lambda item:item[0], reverse=True)
+                     key=lambda item:item[1], reverse=True)
     
     return sortedClassCount[0][0]
