@@ -2,6 +2,8 @@
 # 20180225
 # classify person for dating
 
+import os
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -9,10 +11,12 @@ import matplotlib.pyplot as plt
 import helper
 import kNN
 
-def getData():
+def getDatingData():
     filename = "../data/datingTestSet.txt"
     fi = open(filename, 'r+')
     lines = fi.readlines()
+    fi.close()
+
     dataSetX = []
     dataSetY = []
     for line in lines:
@@ -32,7 +36,7 @@ def getData():
 # testSetPercent: 0.1
 # k: 3
 def datingClassTest(testSetPercent, k):
-    dataSetX, dataSetY = getData()
+    dataSetX, dataSetY = getDatingData()
     normDataSetX, ranges, mins = helper.autoNormalize(dataSetX)
     dataSize = normDataSetX.shape[0]
     testSize = int(dataSize * testSetPercent)
@@ -71,9 +75,60 @@ def plotDatingClass():
     plt.ylabel("ice cream used per week/ volume", fontsize=14)
     plt.show()
 
+# ------------------ digits recognition ------------- #
+def getVector(filename):
+    fi = open(filename, 'r+')
+    lines = fi.readlines()
+    fi.close()
+    vec = []
+    for i in range(32):
+        line = lines[i]
+        for j in range(32):
+            vec.append( int(line[j]) )
+    return vec
+
+def getTrainingSet(dirname):
+    for root, dirs, files in os.walk(dirname):
+        break
+    trainingSetX = []
+    trainingSetY = []
+    for filename in files:
+        label = filename.strip('.txt').split('_')[0]
+        label = int(label)
+        filename = root + filename
+        inX = getVector(filename)
+        trainingSetX.append(inX)
+        trainingSetY.append(label)
+    return trainingSetX, trainingSetY
+
+def getDigitsData(k):
+    dirname = '../data/digits/trainingDigits/'
+    trainingSetX, trainingSetY = getTrainingSet(dirname)
+
+    errorCount = 0
+    dirname = '../data/digits/testDigits/'
+    for root, dirs, files in os.walk(dirname):
+        break
+    for filename in files:
+        header = filename.strip('.txt')
+        label = header.split('_')[0]
+        label = int(label)
+        filename = root +filename
+        inX = getVector(filename)
+        
+        result = kNN.classify(inX, trainingSetX, trainingSetY, k)        
+        print((label, result)) 
+        if(label != result):
+            errorCount += 1
+    totalCount = len(files)
+    errorRate = errorCount/float(totalCount)
+    print((errorRate, errorCount, totalCount))
+    return errorRate
+
 def main():
     # plotDatingClass()
-    profiling()
+    # profiling()
+    print( getDigitsData(3) )
 
 if __name__ == "__main__":
     main()
