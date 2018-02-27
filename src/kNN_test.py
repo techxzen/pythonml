@@ -64,12 +64,18 @@ def profiling():
 
 
 def plotDatingClass():
-    dataSetX, dataSetY = getData()
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.scatter(dataSetX[:,1], dataSetX[:,2], \
-                    s = 15.0*np.array(dataSetY), \
-                    c = 15.0*np.array(dataSetY))
+    dataSetX, dataSetY = getDatingData()
+    plt.figure(1)
+    plt.subplot(111)
+    color = []
+    for y in dataSetY:
+        if(y == 1):
+            color.append((1,0,0))
+        elif(y == 2):
+            color.append((0,1,0))
+        else:
+            color.append((0,0,1))
+    plt.scatter(dataSetX[:,1], dataSetX[:,2], c=color)
     plt.title("test")
     plt.xlabel("time used to play games/ percent", fontsize=14)
     plt.ylabel("ice cream used per week/ volume", fontsize=14)
@@ -126,9 +132,9 @@ def getDigitsData(k):
     return errorRate
 
 def main():
-    # plotDatingClass()
+    plotDatingClass()
     # profiling()
-    print( getDigitsData(3) )
+    # print( getDigitsData(3) )
 
 if __name__ == "__main__":
     main()
