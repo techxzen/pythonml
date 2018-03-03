@@ -6,17 +6,26 @@
 # it is a recursive algorithm
 # input : D(training set), A(feature set), threshold
 # output: T(tree)
-# termination condition:
+# process:
 # 1. if all samples in D belong to the same class C,
 #      T is a single-node-tree, the node flag is C.
+#      return T
 # 2. if A is null, 
 #      T is a single-node-tree, the node flag is the majority.
-# process flow:
-# 1. for a feature Ai in A, compute the g(D, Ai) = H(D) - H(D|Ai)
+#      return T
+# 3. for a feature Ai in A, compute the g(D, Ai) = H(D) - H(D|Ai)
 #      find the max one Ag
-# 2. if Ag < threshold, 
+# 4. if Ag < threshold, 
 #      T is a single-node-tree, the node flag is the majority.
-# 
+#      return T
+# 5. else:
+#      Ag as the Root node
+#      split the D to Di, according to the Ag value
+#      for every Di:
+#           Ti = createTree(Di)
+#           add Ti to the Root
+#      return T
+
 
 def createTree(dateSetX, dataSetY):
     tree = {}
