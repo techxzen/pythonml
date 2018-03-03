@@ -8,11 +8,14 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import helper
+import sys
+sys.path.append("..")
+import common.helper
+
 import kNN
 
 def getDatingData():
-    filename = "../data/datingTestSet.txt"
+    filename = "../../data/datingTestSet.txt"
     fi = open(filename, 'r+')
     lines = fi.readlines()
     fi.close()
@@ -108,11 +111,11 @@ def getTrainingSet(dirname):
     return trainingSetX, trainingSetY
 
 def getDigitsData(k):
-    dirname = '../data/digits/trainingDigits/'
+    dirname = '../../data/digits/trainingDigits/'
     trainingSetX, trainingSetY = getTrainingSet(dirname)
 
     errorCount = 0
-    dirname = '../data/digits/testDigits/'
+    dirname = '../../data/digits/testDigits/'
     for root, dirs, files in os.walk(dirname):
         break
     for filename in files:
