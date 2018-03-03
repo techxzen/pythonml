@@ -15,7 +15,7 @@
 #      return T
 # 3. for a feature Ai in A, compute the g(D, Ai) = H(D) - H(D|Ai)
 #      find the max one Ag
-# 4. if Ag < threshold, 
+# 4. if g(D, Ag) < threshold, 
 #      T is a single-node-tree, the node flag is the majority.
 #      return T
 # 5. else:
@@ -26,11 +26,42 @@
 #           add Ti to the Root
 #      return T
 
+import numpy as np
+import math
 
-def createTree(dateSetX, dataSetY):
-    tree = {}
-    
-    print('tree created!')
+def maxInformationGain(dataSetX, dataSetY, countDList):
+    # H(D)
+    num = len(dataSetY)
+    prob = countDList / float(num)
+    tmp  = - prob * math.log(prob)
+    entropy = np.sum(tmp)
+    # find the max gain
+    for i in range(dataSetX.shape[1]):
+        # H(D|Ai)
+        for 
+
+def createTree(dateSetX, dataSetY, featureName):
+    # convertTo np.array
+    dataSetX = np.array(dataSetX)
+    dataSetY = np.array(dataSetY)
+
+    # if all belong to same class
+    countD = {}
+    for dataY in dataSetY:
+        countD[dataY] = countD.get(dataY, 0) + 1
+    countDList = countD.items()
+    sortedCountD = sorted(countDList, \
+                    key=lambda item:item[1], reverse=True)
+    totalNum = dataSetY.shape[0]
+    maxClassNum = sortedCountD[0][1]
+    maxClass    = sortedCountD[0][0]
+    if totalNum == maxClassNum:
+        return maxClass
+    # if A is null
+    if dataSetX.shape[1] == 0:
+        return maxClass
+    # others, split
+    featureIdx, maxGain = maxInformationGain()
 
 
 def plotTree():
