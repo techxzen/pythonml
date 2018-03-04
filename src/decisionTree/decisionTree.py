@@ -29,18 +29,57 @@
 import numpy as np
 import math
 
-def maxInformationGain(dataSetX, dataSetY, countDList):
-    # H(D)
-    num = len(dataSetY)
-    prob = countDList / float(num)
-    tmp  = - prob * math.log(prob)
-    entropy = np.sum(tmp)
-    # find the max gain
-    for i in range(dataSetX.shape[1]):
-        # H(D|Ai)
-        for 
 
-def createTree(dateSetX, dataSetY, featureName):
+def calcEntropy(dataSetY):
+    num = len(dataSetY)
+    # stastic data
+    count = {}
+    for dataY in dataSetY:
+        count[dataY] = count.get(dataY, 0) + 1
+    # compute
+    entropy = 0
+    for item in count.items():
+        prob = float(item[1]) / num 
+        entropy += - prob * math.log(prob)
+    return entropy
+
+
+def splitDataSet(dataSetX, dataSetY, featureIdx, featureValue):
+    subDataSetX = []
+    subDataSetY = []
+    for i in range(len(dataSetY)):
+        if(dataSetX[i][featureIdx] == featureValue):
+            dataX = dataSetX[i].tolist()
+            tmpX = dataX[:featureIdx]
+            tmpX.extend(dataX[featureIdx+1:])
+            subDataSetX.append(tmpX)
+            subDataSetY.append(dataSetY[i])
+    return subDataSetX, subDataSetY
+
+
+def maxInformationGain(dataSetX, dataSetY):
+    # H(D)
+    entropyD = calcEntropy(dataSetY)
+    # find the max gain
+    maxIdx = 0
+    maxGain = 0
+    for i in range( dataSetX.shape[1] ):
+        # H(D|Ai)
+        features = [item[i] for item in dataSetX]
+        uniqValue = set(features)
+        newEntropy = 0
+        for value in uniqValue:
+            subDataSetX, subDataSetY = splitDataSet(dataSetX, dataSetY, i, value)
+            prob = float(len(subDataSetY)) / float((len(dataSetY)))
+            newEntropy += prob * calcEntropy(subDataSetY)
+        Gain = entropyD - newEntropy
+        if(Gain > maxGain):
+            maxGain = Gain
+            maxIdx  = i
+    return maxGain, maxIdx
+
+
+def createTree(dataSetX, dataSetY, featureList, threshold):
     # convertTo np.array
     dataSetX = np.array(dataSetX)
     dataSetY = np.array(dataSetY)
@@ -61,8 +100,30 @@ def createTree(dateSetX, dataSetY, featureName):
     if dataSetX.shape[1] == 0:
         return maxClass
     # others, split
-    featureIdx, maxGain = maxInformationGain()
+    tree = {}
+    maxGain, maxIdx = maxInformationGain(dataSetX, dataSetY)
+    if(maxGain < threshold):
+        return maxClass
+    else:
+        featureName = featureList[maxIdx]
+        
+        tree[ featureName ] = {}
 
+        features= [example[maxIdx] for example in dataSetX]
+
+        uniqValue = set(features)
+        for value in uniqValue:
+            tmpSetX, tmpSetY \
+                  = splitDataSet(dataSetX, \
+                                 dataSetY, \
+                                  maxIdx, value)
+            tmpFeatureList = featureList[:maxIdx]
+            tmpFeatureList.extend(featureList[maxIdx:])
+            tree[featureName][value] = createTree(tmpSetX, tmpSetY, \
+                                                  tmpFeatureList,\
+                                                  threshold)
+        return tree
+        
 
 def plotTree():
     print('tree ploted')

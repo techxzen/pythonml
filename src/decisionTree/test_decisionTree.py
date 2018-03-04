@@ -21,8 +21,11 @@ def readLensesData():
 
 def main():
     dataSetX, dataSetY = readLensesData()
+    featureList = ['age', 'prescript', 'astigmatic', 'tearRate']
+    threshold = 0
     # decisionTree
-    
+    tree = decisionTree.createTree(dataSetX, dataSetY, featureList, threshold)
+    print(tree) 
 
 
 if __name__ == "__main__":
