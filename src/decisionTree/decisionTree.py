@@ -125,5 +125,17 @@ def createTree(dataSetX, dataSetY, featureList, threshold):
         return tree
         
 
-def plotTree():
-    print('tree ploted')
+def classify(tree, featureList, inX):
+    print((0,tree))
+    if( not isinstance(tree, dict) ):
+        return tree
+    else:
+        print(tree)
+        # determin the idx
+        feature = tree.keys()[0]
+        idx = 0
+        for idx in range(len(featureList)):
+            if(featureList[idx] == feature):
+                break
+        value = inX[idx]
+        return classify(tree[feature][value], featureList, inX)

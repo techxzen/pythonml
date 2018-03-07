@@ -23,10 +23,23 @@ def main():
     dataSetX, dataSetY = readLensesData()
     featureList = ['age', 'prescript', 'astigmatic', 'tearRate']
     threshold = 0
-    # decisionTree
+    # create decisionTree
     tree = decisionTree.createTree(dataSetX, dataSetY, featureList, threshold)
-    print(tree) 
+   
+    # save
+    import pickle
+    fo = open('tree.file','w+')
+    pickle.dump(tree, fo)
+    fo.close()
 
+    # load and use 
+    inX = ['presbyopic', 'hyper', 'no', 'normal']
+    fi = open('tree.file')
+    tree = pickle.load(fi)
+    fi.close()
+    inY = decisionTree.classify(tree, featureList, inX)
+    print(inX)
+    print(inY)
 
 if __name__ == "__main__":
     main()
