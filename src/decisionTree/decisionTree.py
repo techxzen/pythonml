@@ -50,9 +50,7 @@ def splitDataSet(dataSetX, dataSetY, featureIdx, featureValue):
     for i in range(len(dataSetY)):
         if(dataSetX[i][featureIdx] == featureValue):
             dataX = dataSetX[i].tolist()
-            tmpX = dataX[:featureIdx]
-            tmpX.extend(dataX[featureIdx+1:])
-            subDataSetX.append(tmpX)
+            subDataSetX.append(dataX)
             subDataSetY.append(dataSetY[i])
     return subDataSetX, subDataSetY
 
@@ -79,10 +77,12 @@ def maxInformationGain(dataSetX, dataSetY):
     return maxGain, maxIdx
 
 
-def createTree(dataSetX, dataSetY, featureList, threshold):
+def createTree_recur(dataSetX, dataSetY, featureFlag, threshold):
     # convertTo np.array
+    print(featureFlag)
     dataSetX = np.array(dataSetX)
     dataSetY = np.array(dataSetY)
+    featureList = featureFlag.keys()
 
     # if all belong to same class
     countD = {}
@@ -96,9 +96,16 @@ def createTree(dataSetX, dataSetY, featureList, threshold):
     maxClass    = sortedCountD[0][0]
     if totalNum == maxClassNum:
         return maxClass
-    # if A is null
-    if dataSetX.shape[1] == 0:
+
+    # if A is null that is no usable features
+    flag = False
+    for key in featureList:
+        if( featureFlag[key] ):
+            flag = True
+            break
+    if(flag == False):
         return maxClass
+
     # others, split
     tree = {}
     maxGain, maxIdx = maxInformationGain(dataSetX, dataSetY)
@@ -117,20 +124,26 @@ def createTree(dataSetX, dataSetY, featureList, threshold):
                   = splitDataSet(dataSetX, \
                                  dataSetY, \
                                   maxIdx, value)
-            tmpFeatureList = featureList[:maxIdx]
-            tmpFeatureList.extend(featureList[maxIdx:])
-            tree[featureName][value] = createTree(tmpSetX, tmpSetY, \
-                                                  tmpFeatureList,\
+            featureFlag[featureName] = False
+            tree[featureName][value] = createTree_recur(tmpSetX, tmpSetY, \
+                                                  featureFlag,\
                                                   threshold)
+            featureFlag[featureName] = True
         return tree
         
 
+def createTree(dataSetX, dataSetY, featureList, threshold):
+    featureFlag = {}
+    for feature in featureList:
+        featureFlag[feature] = True
+    print(featureFlag)
+    return createTree_recur(dataSetX, dataSetY, featureFlag, threshold)
+
+
 def classify(tree, featureList, inX):
-    print((0,tree))
     if( not isinstance(tree, dict) ):
         return tree
     else:
-        print(tree)
         # determin the idx
         feature = tree.keys()[0]
         idx = 0

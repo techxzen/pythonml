@@ -33,7 +33,7 @@ def main():
     fo.close()
 
     # load and use 
-    inX = ['presbyopic', 'hyper', 'no', 'normal']
+    inX = ['young', 'myope', 'yes', 'normal']
     fi = open('tree.file')
     tree = pickle.load(fi)
     fi.close()

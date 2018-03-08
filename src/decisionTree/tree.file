@@ -64,7 +64,7 @@ p26
 tp27
 Rp28
 (dp29
-S'astigmatic'
+S'prescript'
 p30
 (dp31
 g3
@@ -87,7 +87,7 @@ p37
 tp38
 Rp39
 (dp40
-S'prescript'
+S'age'
 p41
 (dp42
 g3
@@ -110,7 +110,7 @@ p48
 tp49
 Rp50
 (dp51
-S'age'
+S'astigmatic'
 p52
 (dp53
 g3
@@ -345,7 +345,7 @@ p149
 tp150
 Rp151
 (dp152
-g52
+g41
 (dp153
 g3
 (g4
