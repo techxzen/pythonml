@@ -21,11 +21,14 @@ def readLensesData():
 
 def main():
     dataSetX, dataSetY = readLensesData()
-    featureList = ['age', 'prescript', 'astigmatic', 'tearRate']
+    featureList = ['age', 'prescript', 'astigmatic','tearRate']
+    print(featureList)
     threshold = 0
     # create decisionTree
     tree = decisionTree.createTree(dataSetX, dataSetY, featureList, threshold)
-   
+
+    print(tree)  
+ 
     # save
     import pickle
     fo = open('tree.file','w+')

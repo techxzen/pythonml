@@ -55,16 +55,18 @@ def splitDataSet(dataSetX, dataSetY, featureIdx, featureValue):
     return subDataSetX, subDataSetY
 
 
-def maxInformationGain(dataSetX, dataSetY):
+def maxInformationGain(dataSetX, dataSetY, featureList, featureFlag):
     # H(D)
     entropyD = calcEntropy(dataSetY)
     # find the max gain
     maxIdx = 0
     maxGain = 0
-    for i in range( dataSetX.shape[1] ):
+    for i in range( len(featureList) ):
         # H(D|Ai)
-        features = [item[i] for item in dataSetX]
-        uniqValue = set(features)
+        if(not featureFlag[featureList[i]]):
+            continue
+        featureValue = [item[i] for item in dataSetX]
+        uniqValue = set(featureValue)
         newEntropy = 0
         for value in uniqValue:
             subDataSetX, subDataSetY = splitDataSet(dataSetX, dataSetY, i, value)
@@ -77,24 +79,21 @@ def maxInformationGain(dataSetX, dataSetY):
     return maxGain, maxIdx
 
 
-def createTree_recur(dataSetX, dataSetY, featureFlag, threshold):
+def createTree_recur(dataSetX, dataSetY, featureList, featureFlag, threshold):
     # convertTo np.array
-    print(featureFlag)
     dataSetX = np.array(dataSetX)
     dataSetY = np.array(dataSetY)
-    featureList = featureFlag.keys()
 
     # if all belong to same class
     countD = {}
     for dataY in dataSetY:
         countD[dataY] = countD.get(dataY, 0) + 1
-    countDList = countD.items()
-    sortedCountD = sorted(countDList, \
+    sortedCountD = sorted(countD.items(), \
                     key=lambda item:item[1], reverse=True)
     totalNum = dataSetY.shape[0]
     maxClassNum = sortedCountD[0][1]
     maxClass    = sortedCountD[0][0]
-    if totalNum == maxClassNum:
+    if(totalNum == maxClassNum):
         return maxClass
 
     # if A is null that is no usable features
@@ -108,27 +107,27 @@ def createTree_recur(dataSetX, dataSetY, featureFlag, threshold):
 
     # others, split
     tree = {}
-    maxGain, maxIdx = maxInformationGain(dataSetX, dataSetY)
+    maxGain, maxIdx = maxInformationGain(dataSetX, dataSetY, featureList, featureFlag)
     if(maxGain < threshold):
         return maxClass
     else:
         featureName = featureList[maxIdx]
-        
         tree[ featureName ] = {}
 
         features= [example[maxIdx] for example in dataSetX]
 
+        featureFlag[featureName] = False
+        
         uniqValue = set(features)
         for value in uniqValue:
             tmpSetX, tmpSetY \
                   = splitDataSet(dataSetX, \
                                  dataSetY, \
                                   maxIdx, value)
-            featureFlag[featureName] = False
-            tree[featureName][value] = createTree_recur(tmpSetX, tmpSetY, \
+            tree[featureName][value] = createTree_recur(tmpSetX, tmpSetY, featureList, \
                                                   featureFlag,\
                                                   threshold)
-            featureFlag[featureName] = True
+        featureFlag[featureName] = True
         return tree
         
 
@@ -136,8 +135,7 @@ def createTree(dataSetX, dataSetY, featureList, threshold):
     featureFlag = {}
     for feature in featureList:
         featureFlag[feature] = True
-    print(featureFlag)
-    return createTree_recur(dataSetX, dataSetY, featureFlag, threshold)
+    return createTree_recur(dataSetX, dataSetY, featureList, featureFlag, threshold)
 
 
 def classify(tree, featureList, inX):
