@@ -50,13 +50,12 @@ def getDataSet():
     spamDir = '../../data/naiveBayes_data/email/spam/'
     getHamData(dataSetX, dataSetY, hamDir)
     getSpamData(dataSetX, dataSetY, spamDir)
-    print(len(dataSetX))
-    print(len(dataSetY))
 
 
 def main():
-    # ham dir
-    getDataSet()
+    # data 
+    dataSetX, dataSetY = getDataSet()
+    # get word list
     
 
 
