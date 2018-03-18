@@ -9,10 +9,13 @@
 # 2. create a wordList
 # 3. sperate trainingSet and testSet
 # 4. for trainingSet, calc P(Y), P(X|Y)
-# 5. for testSet, calc P(Y|X) using bayes, get error rate
+# 5. words2vec
+# 6. for testSet, calc P(Y|X) using bayes, get error rate
 
 
 import os
+
+import re
 
 
 def getFileList(dirName):
@@ -44,19 +47,35 @@ def getSpamData(dataSetX, dataSetY, dirName):
 
 
 def getDataSet():
-    dataSetX = []
-    dataSetY = []
+    rawSetX = []
+    rawSetY = []
     hamDir = '../../data/naiveBayes_data/email/ham/'
     spamDir = '../../data/naiveBayes_data/email/spam/'
-    getHamData(dataSetX, dataSetY, hamDir)
-    getSpamData(dataSetX, dataSetY, spamDir)
+    getHamData(rawSetX, rawSetY, hamDir)
+    getSpamData(rawSetX, rawSetY, spamDir)
+    # regular expression
+    regEx = re.compile('\\W*')
+    dataSetX = []
+    for item in rawSetX:
+        dataSetX.append(regEx.split(item))
+    return dataSetX, rawSetY
+
+
+def createVocabList(dataSetX):
+    vocabSet = set([])
+    # set 2 list
+    for item in dataSetX:
+        vocabSet = vocabSet | set(item)
+    return list(vocabSet)
 
 
 def main():
     # data 
     dataSetX, dataSetY = getDataSet()
     # get word list
-    
+    vocabList = createVocabList(dataSetX)    
+    print(vocabList)
+    print(len(vocabList))
 
 
 if __name__ == "__main__":
