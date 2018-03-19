@@ -69,13 +69,31 @@ def createVocabList(dataSetX):
     return list(vocabSet)
 
 
+def words2Vec(words, vocabList):
+    # zero value list
+    vec = [0]
+
+
 def main():
     # data 
     dataSetX, dataSetY = getDataSet()
     # get word list
     vocabList = createVocabList(dataSetX)    
-    print(vocabList)
-    print(len(vocabList))
+    
+    # create trainSet, testSet
+    testIndices = []
+    totalNum = len(dataSetX)
+    trainIndices = range(total_num)
+    for _ in range(int(totalNum * 0.2)):
+        randNumber = int(random.uniform(0, len(trainIndices))
+        testIndices.append( trainIndices[randNumber] )
+        del( trainIndices[randNumber] )
+
+    # words2vec
+    trainVecX = []
+    for idx in trainIndices:
+        trainVecX.append(words2Vec(dataSetX[idx], vocabList))
+    
 
 
 if __name__ == "__main__":
