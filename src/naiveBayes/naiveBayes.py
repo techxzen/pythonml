@@ -17,8 +17,8 @@ def train_c2(trainVecX, trainSetY):
     p_y0 = 0.0
     p_y1 = 0.0
     # p(xi=1|y=0), p(xi=1|y=1)
-    p0s = np.zeros(vocabNum)
-    p1s = np.zeros(vocabNum)
+    p0s = np.ones(vocabNum)
+    p1s = np.ones(vocabNum)
     
     for idx in range(trainNum):
         if(trainSetY[idx] == 0):
@@ -28,9 +28,9 @@ def train_c2(trainVecX, trainSetY):
             p_y1 += 1
             p1s += trainVecX[idx]
 
-    p0s   = p0 / p_y0
-    p1s   = p1 / p_y1
-    p_y1 = p_y1 / trainNum
+    p0s   = p0 / (p_y0 + 2)
+    p1s   = p1 / (p_y1 + 2)
+    p_y1 = (p_y1 + 1) / (trainNum + 2)
 
     return p_y0, p_y1, p0s, p1s
 
