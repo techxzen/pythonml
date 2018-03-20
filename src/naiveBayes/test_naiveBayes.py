@@ -71,7 +71,13 @@ def createVocabList(dataSetX):
 
 def words2Vec(words, vocabList):
     # zero value list
-    vec = [0]
+    vec = [0] * len(vocabList)
+    for word in words:
+        if(word in vocabList):
+            vec[ vocabList.index(word) ] = 1
+        else:
+            print('no such word %s in vocabulary list!' %(word))
+    return vec
 
 
 def main():
@@ -91,9 +97,19 @@ def main():
 
     # words2vec
     trainVecX = []
+    trainSetY = []
+    testVecX  = []
+    testSetY  = []
     for idx in trainIndices:
         trainVecX.append(words2Vec(dataSetX[idx], vocabList))
+        trainSetY.append(dataSetY[idx])
+    for idx in testIndices:
+        testVecX.append(words2Vec(dataSetX[idx], vocabList))
+        testSetY.append(dataSetY[idx])
+
     
+
+    # train
 
 
 if __name__ == "__main__":
