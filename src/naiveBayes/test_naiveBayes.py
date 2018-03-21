@@ -17,6 +17,10 @@ import os
 
 import re
 
+import random
+
+import naiveBayes
+
 
 def getFileList(dirName):
     for root, dirs, files in os.walk(dirName):
@@ -89,11 +93,11 @@ def main():
     # create trainSet, testSet
     testIndices = []
     totalNum = len(dataSetX)
-    trainIndices = range(total_num)
+    trainIndices = range(totalNum)
     for _ in range(int(totalNum * 0.2)):
-        randNumber = int(random.uniform(0, len(trainIndices))
+        randNumber = int(random.uniform(0, len(trainIndices)) )
         testIndices.append( trainIndices[randNumber] )
-        del( trainIndices[randNumber] )
+        trainIndices.remove( trainIndices[randNumber] )
 
     # words2vec
     trainVecX = []
@@ -107,9 +111,21 @@ def main():
         testVecX.append(words2Vec(dataSetX[idx], vocabList))
         testSetY.append(dataSetY[idx])
 
-    
-
     # train
+    p0, p1, p0s, p1s = naiveBayes.train_c2(trainVecX, trainSetY)
+    print(p0)
+    print(p1)
+    # test
+    errorCount = 0.0
+    totalCount = 0.0
+    for idx in range(len(testVecX)):
+        totalCount += 1
+        testVec = testVecX[idx]
+        c = naiveBayes.classify_c2(testVec, p0, p1, p0s, p1s)
+        if(c != testSetY[idx]):
+            errorCount += 1
+    print('errorCount / totalCount: %d / %d = %f' %(errorCount, totalCount, errorCount/totalCount))
+
 
 
 if __name__ == "__main__":

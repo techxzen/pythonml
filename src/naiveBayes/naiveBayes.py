@@ -28,17 +28,18 @@ def train_c2(trainVecX, trainSetY):
             p_y1 += 1
             p1s += trainVecX[idx]
 
-    p0s   = p0 / (p_y0 + 2)
-    p1s   = p1 / (p_y1 + 2)
+    p0s   = p0s / (p_y0 + 2)
+    p1s   = p1s / (p_y1 + 2)
     p_y1 = (p_y1 + 1) / (trainNum + 2)
+    p_y0 = (p_y0 + 1) / (trainNum + 2)
 
     return p_y0, p_y1, p0s, p1s
 
 
-def classify_C2(vec, p_y0, p_y1, p0, p1):
+def classify_c2(vec, p_y0, p_y1, p0, p1):
     #p(y=0|x) = p(x|y=0) * p(y=0) / p(x)
     prob0 = p_y0
-    for idx in len(vec):
+    for idx in range( len(vec) ):
         if(vec[idx] == 1):
             prob0 *= p0[idx]
         else:
@@ -46,7 +47,7 @@ def classify_C2(vec, p_y0, p_y1, p0, p1):
 
     #p(y=1|x) = p(x|y=1) * p(y=1) / p(x)
     prob1 = p_y1
-    for idx in len(vec):
+    for idx in range( len(vec) ):
         if(vec[idx] == 1):
             prob1 *= p1[idx]
         else:
@@ -55,5 +56,5 @@ def classify_C2(vec, p_y0, p_y1, p0, p1):
     # compare
     if(prob0 > prob1):
         return 0
-    else
+    else:
         return 1
