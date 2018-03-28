@@ -14,13 +14,14 @@ def sigmoid(x):
 def batch_GD(dataSetX, dataSetY, alpha=0.001, iteration=500):
 	example_num = dataSetX.shape[0]
 	feature_num = dataSetX.shape[1]
-	weights = np.ones(feature_num)
 	
+	weights = np.ones((feature_num,1))
+	dataSetY = dataSetY.reshape((example_num, 1))
 	''' iterations '''
 	for i in range(iteration):
-		tmpY = sigmoid(dataSetX * weights.T)
-		delta = tmpY.T - dataSetY
-		weights = weights - alpha * (delta.T * dataSetX)
+		tmpY = sigmoid( np.dot(dataSetX, weights) )
+		delta = tmpY - dataSetY
+		weights = weights - alpha * np.dot(dataSetX.T, delta)
 	return weights
 
 

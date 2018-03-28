@@ -15,17 +15,13 @@ def loadData(path):
 	fi.close()
 	for line in lines:
 		data = line.strip().split('\t')
-		dataSetX.append([1.0, data[0], data[1]])
-		dataSetY.append(data[-1])
-	dataSetX = np.float32( np.array(dataSetX) )
-	dataSetY = np.int32(np.array(dataSetY) )
-	return dataSetX, dataSetY
+		dataSetX.append([1.0, float(data[0]), float(data[1])])
+		dataSetY.append(int(data[2]))
+	return np.array(dataSetX), np.array(dataSetY)
 
 def main():
 	dataSetX, dataSetY = loadData('../../data/logisticRegression/testSet.txt')
-	# print(dataSetX)	
-	weights = logReg.batch_GD(dataSetX, dataSetY)
-	
+	weights = logReg.batch_GD(dataSetX, dataSetY, 0.001, 500)
 	print(weights)
 	
 if __name__ == "__main__":
