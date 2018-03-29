@@ -21,8 +21,15 @@ def loadData(path):
 
 def main():
 	dataSetX, dataSetY = loadData('../../data/logisticRegression/testSet.txt')
+	''' batch gd '''
+	print('batch gd')
 	weights = logReg.batch_GD(dataSetX, dataSetY, 0.001, 500)
 	print(weights)
+	''' stochastic gd '''
+	print('stochastic gd')
+	weights = logReg.stochastic_GD(dataSetX, dataSetY, 0.001, 500)
+	print(weights)
+	''' improved stochatic gd, faster, stable '''
 	
 if __name__ == "__main__":
 	main()
