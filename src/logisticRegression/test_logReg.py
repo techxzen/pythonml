@@ -20,23 +20,36 @@ def loadData(path):
         dataSetY.append(int(data[2]))
     return np.array(dataSetX), np.array(dataSetY)
 
-def plot():
-    x = np.arange(0, 10, 0.2)
-    y = np.sin(x)
+def theline(weights, x1):
+    x2 = (weights[0] + weights[1] * x1) / (-weights[2])
+    return x2
+
+def plot(dataSetX, dataSetY, weights):
+    x1 = dataSetX[:,1]
+    x2 = dataSetX[:,2]
+    x1_max = np.max(x1)
+    x1_min = np.min(x1)
+    
+    color = []
+    for item in dataSetY:
+        if(item == 0):
+            color.append((1,0,0)) #each channel is 0~1, not 0~255
+        else:
+            color.append((0,1,0))
+            
+    x = np.linspace(x1_min, x1_max, 10)
+    y = theline(weights, x)
     
     ''' figure '''
-    fig = plt.figure(0)
+    fig, ax = plt.subplots(1,1)
     ''' axes '''
-    ax = fig.add_subplot(211)
-    ax.plot(x, y)
-    
-    ax = fig.add_subplot(212)
-    ax.plot(x*2, y)
-    
+    ax.plot(x, y, 'b-')
+    ax.scatter(x1, x2, c=color)
+
+    ax.set(title='test')
+    ax.set(xlabel='x1')
+    ax.set(ylabel='x2')
     ''' show '''
-    plt.title('test')
-    plt.xlabel('x1')
-    plt.ylabel('x2')
     plt.show()
 
 
@@ -51,7 +64,7 @@ def main():
     weights = logReg.stochastic_GD(dataSetX, dataSetY, 0.001, 500)
     print(weights)
     ''' improved stochatic gd, faster, stable '''
-    plot()
+    plot(dataSetX, dataSetY, weights)
     
     
 if __name__ == "__main__":
