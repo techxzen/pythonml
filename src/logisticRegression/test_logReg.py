@@ -33,6 +33,12 @@ def plot(dataSetX, dataSetY, weights):
     color = []
     for item in dataSetY:
         if(item == 0):
+            ''' https://matplotlib.org/api/colors_api.html '''
+            ''' 
+            (r,g,b), all channels value is 0~1.
+            (1,0,0) means R
+            (0,1,0) means G
+            '''
             color.append((1,0,0)) #each channel is 0~1, not 0~255
         else:
             color.append((0,1,0))
