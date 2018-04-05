@@ -61,22 +61,30 @@ def plot(dataSetX, dataSetY, weights):
     plt.show()
 
 def plotRecord(record):
-    y = record[:,0]
-    num = len(x)
+    y0 = record[:,0]
+    y1 = record[:,1]
+    y2 = record[:,2]
+    num = len(record)
     x = range(num)
+    
+    fig, ax = plt.subplots(3,1)
+    ax[0].plot(x, y0)
+    ax[1].plot(x, y1)
+    ax[2].plot(x, y2)
+    plt.show()
     
 def main():
     dataSetX, dataSetY = loadData('../../data/logisticRegression/testSet.txt')
     ''' batch gd '''
     print('batch gd')
-    weights_0, record_0 = logReg.batch_GD(dataSetX, dataSetY, 0.001, 500)
+    weights_0, record_0 = logReg.batch_GD(dataSetX, dataSetY, 0.001, 50000, True)
     print(weights_0)
-
+    plotRecord(record_0)
+    
     ''' stochastic gd '''
     print('stochastic gd')
     weights_1, record_1 = logReg.stochastic_GD(dataSetX, dataSetY, 0.001, 500, True)
     print(weights_1)
-
     plotRecord(record_1)
     
     ''' improved stochatic gd, faster, stable '''

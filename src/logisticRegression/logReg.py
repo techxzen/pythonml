@@ -26,7 +26,7 @@ def batch_GD(dataSetX, dataSetY, alpha=0.001, iteration=500, debug=False):
         weights = weights - alpha * np.dot(dataSetX.T, delta)
         if(debug):
             record.append(weights)
-    return weights, record
+    return weights, np.array(record)
 
 
 ''' stochastic gradient descent '''
@@ -45,7 +45,7 @@ def stochastic_GD(dataSetX, dataSetY, alpha=0.01, iteration=200, debug=False):
             weights = weights - alpha * delta * dataSetX[j].reshape(feature_num, 1)
             if(debug):
                 record.append(weights)
-    return weights, record
+    return weights, np.array(record)
     
     
 ''' mini-batch gradient descent '''
