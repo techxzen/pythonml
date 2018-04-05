@@ -44,32 +44,44 @@ def plot(dataSetX, dataSetY, weights):
             color.append((0,1,0))
             
     x = np.linspace(x1_min, x1_max, 10)
-    y = theline(weights, x)
     
     ''' figure '''
-    fig, ax = plt.subplots(1,1)
+    figure_num = len(weights)
+    fig, ax = plt.subplots(figure_num, 1)
     ''' axes '''
-    ax.plot(x, y, 'b-')
-    ax.scatter(x1, x2, c=color)
+    for idx in range(figure_num):
+        ax[idx].scatter(x1, x2, c=color)
+        y = theline(weights[idx], x)
+        ax[idx].plot(x, y, 'b-')
 
-    ax.set(title='test')
-    ax.set(xlabel='x1')
-    ax.set(ylabel='x2')
+        ax[idx].set(title='test')
+        ax[idx].set(xlabel='x1')
+        ax[idx].set(ylabel='x2')
     ''' show '''
     plt.show()
 
-
+def plotRecord(record):
+    y = record[:,0]
+    num = len(x)
+    x = range(num)
+    
 def main():
     dataSetX, dataSetY = loadData('../../data/logisticRegression/testSet.txt')
     ''' batch gd '''
     print('batch gd')
-    weights = logReg.batch_GD(dataSetX, dataSetY, 0.001, 500)
-    print(weights)
+    weights_0, record_0 = logReg.batch_GD(dataSetX, dataSetY, 0.001, 500)
+    print(weights_0)
+
     ''' stochastic gd '''
     print('stochastic gd')
-    weights = logReg.stochastic_GD(dataSetX, dataSetY, 0.001, 500)
-    print(weights)
+    weights_1, record_1 = logReg.stochastic_GD(dataSetX, dataSetY, 0.001, 500, True)
+    print(weights_1)
+
+    plotRecord(record_1)
+    
     ''' improved stochatic gd, faster, stable '''
+
+    weights = [weights_0, weights_1]
     plot(dataSetX, dataSetY, weights)
     
     
