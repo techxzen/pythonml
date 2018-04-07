@@ -46,8 +46,3 @@ def stochastic_GD(dataSetX, dataSetY, alpha=0.01, iteration=200, debug=False):
             if(debug):
                 record.append(weights)
     return weights, np.array(record)
-    
-    
-''' mini-batch gradient descent '''
-def mini_batch_GD():
-    return 0
